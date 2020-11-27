@@ -1,12 +1,16 @@
 <template>
   <div>
     <ul>
-      <li v-for="data in datalist" :key='data.filmId' @click="handleChangePage(data)">
-        <img :src="data.poster" alt="">
+      <li
+        v-for="data in datalist"
+        :key="data.filmId"
+        @click="handleChangePage(data)"
+      >
+        <img :src="data.poster" alt="" />
         <div>
-          <p><h4>{{data.name}}</h4></p>
-          <p>{{data.grade}}</p>
-          <p>导演:{{data.director}}</p>
+          <h4>{{ data.name }}</h4>
+          <p>主演:{{ data.actors | actorsFilter }}</p>
+          <p>{{ data.nation }} | {{ data.runtime }}分钟</p>
         </div>
       </li>
     </ul>
@@ -14,7 +18,12 @@
 </template>
 
 <script>
+import Vue from "vue";
 import axios from "axios";
+Vue.filter("actorsFilter", (actors) => {
+  if (!actors) return "暂无主演";
+  return actors.map((item) => item.name).join(" ");
+});
 export default {
   data() {
     return {
@@ -24,14 +33,13 @@ export default {
   methods: {
     handleChangePage(id) {
       // console.log(id);
-      //编程式导航
-      //通过路径跳转
+      // 编程式导航
+      // 通过路径跳转
       // this.$router.push(`/detail/${id}`)
-      //里面是一个对象 前一个id是动态路由绑定的id 后者是传过来的id
+      // 里面是一个对象 前一个id是动态路由绑定的id 后者是传过来的id
       // this.$router.push({name:'Detail',params:{id:id}})
-
-      //query跳转
-      this.$router.push(`/detail?id=${id.filmId}`)
+      // query跳转
+      this.$router.push(`/detail?id=${id.filmId}`);
     },
   },
   mounted() {
@@ -67,14 +75,8 @@ ul {
       width: 270px;
       overflow: hidden;
       text-overflow: ellipsis;
-      /* 弹性伸缩盒子模型显示 */
-      display: -webkit-box;
-      /* 限制在一个块元素显示的文本的行数 */
-      -webkit-line-clamp: 1;
-      /* 设置或检索伸缩盒对象的子元素的排列方式 */
-      -webkit-box-orient: vertical;
+      white-space: nowrap;
     }
   }
 }
 </style>>
-

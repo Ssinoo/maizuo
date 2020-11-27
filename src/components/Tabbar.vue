@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <router-link to='/film' tag="li" active-class="myactive"> 
+      <router-link to='/film' tag="li" active-class="myactive">
       <i class="iconfont iconsay"></i>
       film
       </router-link>
@@ -33,14 +33,16 @@ export default {
     position:fixed;
     bottom: 0;
     left:0;
+   
     width: 100%;
     display: flex;
-    
+
     li{
       flex: 1;
       display: flex;
       flex-direction: column;
       height: 50px;
+      
       justify-content: center;
       align-items: center;
     }

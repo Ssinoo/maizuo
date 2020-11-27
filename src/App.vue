@@ -1,36 +1,37 @@
 <template>
   <div id="app">
     <tabber></tabber>
-    <router-view/>
+    <section>
+      <router-view></router-view>
+    </section>
   </div>
 </template>
 
-
 <script>
-import axios from 'axios'
-import tabber from './components/Tabbar'
+import tabber from "./components/Tabbar";
 
 export default {
-  components:{
-    tabber
+  components: {
+    tabber,
   },
-  
-  
-
-
 };
 </script>
 
 <style lang='less' >
-*{
+body{ 
+  background-color: #f4f4f4;
+}
+* {
   margin: 0;
   padding: 0;
-  ul ,li {
-  list-style: none;
-}
+  ul,
+  li {
+    list-style: none;
+  }
 }
 
-html{
-  height: 100%;
+
+section{
+  margin-bottom: 50px;
 }
 </style>
