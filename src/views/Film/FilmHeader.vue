@@ -21,6 +21,7 @@ export default {};
   border-bottom: red 1px solid;
 }
 .choose {
+  z-index: 100;
   position: sticky;
   top: 0px;
   background-color: #ffffff;
@@ -28,7 +29,7 @@ export default {};
     height: 40px;
     display: flex;
     li {
-      flex: 1;
+      flex: 1;  
       display: flex;
       margin-top: 8px;
       justify-content: center;

@@ -1,5 +1,7 @@
 <template>
   <div v-if="filminfo">
+    <!-- 电影顶部信息 用组件封装-->
+    <detail-header v-top :filminfoname='filminfo.name'></detail-header>
     <!-- 电影海报 -->
     <div class="film-header">
       <img :src="filminfo.poster" />
@@ -42,14 +44,14 @@
     <div class="actors">
       <div><h3>演职人员</h3></div>
       <!-- 演职人员的图片 用swiper.js来制作 有那边预留的插槽 通过父传子 传需要一页传几个 自定义class名-->
-      <detail-swiper :slidesPerView="4" swiperclass='swiper-actors'>
+      <detail-swiper :slidesPerView="4" swiperclass="swiper-actors">
         <div v-for="(data, index) in filminfo.actors" class="swiper-slide">
           <img :src="data.avatarAddress" alt="" />
           <div style="text-align: center">
             <div style="font-size: 12px">
               {{ data.name }}
             </div>
-            <div style="font-size: 10px; color:#797d82">
+            <div style="font-size: 10px; color: #797d82">
               {{ data.role }}
             </div>
           </div>
@@ -60,9 +62,9 @@
     <!-- 电影剧照 -->
     <div class="photos">
       <div><h3>电影剧照</h3></div>
-      <detail-swiper :slidesPerView="2" swiperclass='swiper-photos'>
-        <div v-for="(data,index) in filminfo.photos " class="swiper-slide">
-          <img :src="data" alt="">
+      <detail-swiper :slidesPerView="2" swiperclass="swiper-photos">
+        <div v-for="(data, index) in filminfo.photos" class="swiper-slide">
+          <img :src="data" alt="" />
         </div>
       </detail-swiper>
     </div>
@@ -75,12 +77,31 @@ import http from "@/util/http";
 import Vue from "vue";
 import moment from "moment";
 import DetailSwiper from "./Detail/DetailSwiper.vue";
+import DetailHeader from "./Detail/DetailHeader.vue";
 Vue.filter("dataFilter", (data) => {
   moment.locale("zh-ch");
   return moment(data * 1000).format("YYYY-MM-DD");
 });
+//定义指令名
+Vue.directive("top", {
+  //获取原生Dom节点
+  inserted(el) {
+   window.onscroll=()=>{
+     //原生js获取滚动兼容性的写法
+     if((document.body.scrollTop||document.documentElement.scrollTop)>50){
+       
+       el.style.display='block';
+     }else{
+       el.style.display='none';
+     }
+   }
+  },
+  unbind(){
+    window.onscroll = null
+  }
+});
 export default {
-  components: { DetailSwiper },
+  components: { DetailSwiper, DetailHeader },
   data() {
     return {
       filminfo: null,
