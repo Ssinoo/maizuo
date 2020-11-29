@@ -1,7 +1,7 @@
 <template>
   <div v-if="filminfo">
     <!-- 电影顶部信息 用组件封装-->
-    <detail-header v-top :filminfoname='filminfo.name'></detail-header>
+    <detail-header v-top :filminfoname="filminfo.name"></detail-header>
     <!-- 电影海报 -->
     <div class="film-header">
       <img :src="filminfo.poster" />
@@ -64,7 +64,7 @@
       <div><h3>电影剧照</h3></div>
       <detail-swiper :slidesPerView="2" swiperclass="swiper-photos">
         <div v-for="(data, index) in filminfo.photos" class="swiper-slide">
-          <img :src="data" alt="" />
+          <img :src="data" alt="" @click="handlePreview(index)" />
         </div>
       </detail-swiper>
     </div>
@@ -78,6 +78,8 @@ import Vue from "vue";
 import moment from "moment";
 import DetailSwiper from "./Detail/DetailSwiper.vue";
 import DetailHeader from "./Detail/DetailHeader.vue";
+import { ImagePreview} from "vant";
+//改变时间样式
 Vue.filter("dataFilter", (data) => {
   moment.locale("zh-ch");
   return moment(data * 1000).format("YYYY-MM-DD");
@@ -86,19 +88,20 @@ Vue.filter("dataFilter", (data) => {
 Vue.directive("top", {
   //获取原生Dom节点
   inserted(el) {
-   window.onscroll=()=>{
-     //原生js获取滚动兼容性的写法
-     if((document.body.scrollTop||document.documentElement.scrollTop)>50){
-       
-       el.style.display='block';
-     }else{
-       el.style.display='none';
-     }
-   }
+    window.onscroll = () => {
+      //原生js获取滚动兼容性的写法
+      if (
+        (document.body.scrollTop || document.documentElement.scrollTop) > 50
+      ) {
+        el.style.display = "block";
+      } else {
+        el.style.display = "none";
+      }
+    };
   },
-  unbind(){
-    window.onscroll = null
-  }
+  unbind() {
+    window.onscroll = null;
+  },
 });
 export default {
   components: { DetailSwiper, DetailHeader },
@@ -108,7 +111,18 @@ export default {
       isShow: false,
     };
   },
+  methods: {
+    handlePreview(index) {
+      ImagePreview({
+        images: this.filminfo.photos,
+        startPosition: index,
+        closeable: true,
+        closeIconPosition: "top-left",
+      });
+    },
+  },
   mounted() {
+    
     console.log(this.$route.query.id);
     http({
       // 路径直接从 base路径之后开始写
@@ -121,6 +135,7 @@ export default {
       console.log(res.data.data.film);
       //将axios请求的数据赋值给 filminfo
       this.filminfo = res.data.data.film;
+      
     });
   },
 };
@@ -153,6 +168,7 @@ export default {
       margin-left: 10px;
     }
     span:nth-child(2) {
+      margin-top: 5px;
       margin-left: 3px;
       font-size: 10px;
       height: 14px;

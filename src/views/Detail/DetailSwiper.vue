@@ -38,6 +38,7 @@ export default {
 .swiper-wrapper {
   img {
     width: 100%;
+   
   }
 }
 </style>
