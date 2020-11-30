@@ -10,9 +10,10 @@ const http = axios.create({
 http.interceptors.request.use(function (config) {
   //请求时调用轻提示
   Toast.loading({
-    message: "加载莫急...",
+    message: "摸鱼摸鱼",
     forbidClick: true,
     loadingType:'spinner',
+    // 时间设置为0,一直加载,用clear来取消
     duration:0
   });
   // Do something before request is sent

@@ -32,7 +32,7 @@ Vue.use(NavBar).use(Icon);
 export default {
   methods:{
     hanldClick(){
-      console.log('11');
+    
       this.$router.push('/city')
     }
   },
@@ -51,7 +51,7 @@ export default {
         "X-Host": "mall.film-ticket.cinema.list",
       },
     }).then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
       this.cinemalist = res.data.data.cinemas;
 
       //状态立即改变,但是dom异步渲染

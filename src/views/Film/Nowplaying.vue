@@ -64,8 +64,8 @@ export default {
       // 1.ajax请求页面
       // 2.合并新数据到老数据下面
       // 3.让this.loading=false
-      // 4.判断请求到的所有 数据是否等于总数，等于停止加载 给this.finished=true
-      if (this.datalist.length === this.total) {
+      // 4.判断请求到的所有 数据是否等于总数，等于停止加载 给this.finished=true 到下一级再回上一级，会导致数据为0，而触发
+      if (this.datalist.length === this.total && this.datalist.length!=0) {
         this.finished = true;
         return;
       }
@@ -90,8 +90,7 @@ export default {
     }).then((res) => {
       this.datalist = res.data.data.films;
       this.total = res.data.data.total;
-      console.log(this.total);
-      console.log(res.data);
+    
     });
   },
 };
