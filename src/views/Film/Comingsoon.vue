@@ -1,6 +1,6 @@
 <template>
   <div>
-    Comingsoon
+    别看电影了，赶紧回家睡觉
   </div>
 </template>
 

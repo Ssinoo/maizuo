@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <tabber></tabber>
+    <!-- <tabber v-show="this.$store.state.isTabbarShow"></tabber> -->
+    <tabber v-show="isTabbarShow"></tabber>
     <section>
       <router-view></router-view>
     </section>
@@ -9,11 +10,19 @@
 
 <script>
 import tabber from "./components/Tabbar";
+//隐射状态
+import {mapState} from 'vuex'
 
 export default {
   components: {
     tabber,
   },
+  computed:{
+    ...mapState('TabbarModule',['isTabbarShow'])
+  },
+  mounted(){
+    console.log(mapState('TabbarModule',['isTabbarShow']));
+  }
 };
 </script>
 

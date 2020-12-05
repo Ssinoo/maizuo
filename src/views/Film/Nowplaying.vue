@@ -33,6 +33,7 @@ import Vue from "vue";
 //import axios from "axios";
 import http from "@/util/http.js";
 import { List, Cell } from "vant";
+import { mapState } from 'vuex';
 
 Vue.use(List).use(Cell);
 Vue.filter("actorsFilter", (actors) => {
@@ -65,13 +66,13 @@ export default {
       // 2.合并新数据到老数据下面
       // 3.让this.loading=false
       // 4.判断请求到的所有 数据是否等于总数，等于停止加载 给this.finished=true 到下一级再回上一级，会导致数据为0，而触发
-      if (this.datalist.length === this.total && this.datalist.length!=0) {
+      if (this.datalist.length === this.total && this.datalist.length!==0) {
         this.finished = true;
         return;
       }
       this.current++;
       http({
-        url: `/gateway?cityId=430100&pageNum=${this.current}&pageSize=10&type=1&k=5998332`,
+        url: `/gateway?cityId=${this.cityId}&pageNum=${this.current}&pageSize=10&type=1&k=5998332`,
         headers: {
           "X-Host": "mall.film-ticket.film.list",
         },
@@ -81,9 +82,13 @@ export default {
       });
     },
   },
+  computed:{
+    // 从store 封装的module里面 拿出cityid
+    ...mapState('CityModule',['cityId'])
+  },
   mounted() {
     http({
-      url: "/gateway?cityId=430100&pageNum=1&pageSize=10&type=1&k=5998332",
+      url: `/gateway?cityId=${this.cityId}&pageNum=1&pageSize=10&type=1&k=5998332`,
       headers: {
         "X-Host": "mall.film-ticket.film.list",
       },
@@ -101,6 +106,7 @@ export default {
   display: flex;
   flex-direction: column;
   .van-cell__value {
+   
     display: flex;
     img {
       height: 100px;
@@ -112,7 +118,7 @@ export default {
         font-size: 18px;
       }
       p {
-        width: 270px;
+        width: 250px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

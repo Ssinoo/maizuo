@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Film from '@/views/Film.vue'
 import Cinema from '@/views/Cinema.vue'
+import Search from '@/views/Search.vue'
 import Center from '@/views/Center.vue'
+import Bug from '@/views/Bug.vue'
 import City from '@/views/City.vue'
 import Nowplaying from '@/views/Film/Nowplaying.vue'
 import Comingsoon from '@/views/Film/Comingsoon'
@@ -25,7 +27,6 @@ const routes = [
       },
       {
         path: '',
-
         redirect: '/film/nowplaying'
       }
     ]
@@ -33,6 +34,14 @@ const routes = [
   {
     path: '/cinema',
     component: Cinema
+  },
+  {
+    path: '/bug',
+    component: Bug
+  },
+  {
+    path: '/cinema/search',
+    component: Search
   },
   {
     path: '/center',

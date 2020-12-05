@@ -7,6 +7,7 @@
           :title="item.name"
           v-for="(item, index) in data.list"
           :key="index"
+          @click="handleChangePage(item.name,item.cityId)"
         />
       </div>
     </van-index-bar>
@@ -20,6 +21,8 @@ import { IndexBar, IndexAnchor, Cell, Toast } from "vant";
 Vue.use(IndexBar);
 Vue.use(IndexAnchor);
 import http from "@/util/http.js";
+import { mapMutations } from 'vuex';
+import {mapState} from 'vuex'
 export default {
   data() {
     return {
@@ -40,6 +43,8 @@ export default {
     });
   },
   methods: {
+    ...mapMutations('CityModule',['ChangeCityName','ChangeCityId']),
+    //改造后端传来的数据
     handleCityData(cities) {
       const newcitylist = [];
       const letterArr = [];
@@ -62,6 +67,7 @@ export default {
       console.log(newcitylist);
       return newcitylist;
     },
+    //abcd...列表点击事件
     handleSelect(index) {
       console.log(index);
       Toast({
@@ -69,6 +75,17 @@ export default {
         
       });
     },
+    //点击事件，将获取的城市id 提交到 store的mutation 进行state的改变
+    handleChangePage(name,cityId){
+      // this.$store.state.cityName= name;
+      // this.$store.commit('ChangeCityName',name)
+      // this.$store.commit('ChangeCityId',cityId)
+      //换种写法
+      this.ChangeCityName(name)
+      this.ChangeCityId(cityId)
+      this.$router.back();
+
+    }
   },
 };
 </script>

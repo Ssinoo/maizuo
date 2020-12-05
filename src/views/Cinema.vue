@@ -1,39 +1,48 @@
 <template>
   <div>
     <van-nav-bar 
-    title="标题"
+    title="电影院"
     @click-left='hanldClick()'
+    @click-right="hanldRightClick()"
     >
       <template #left >
-        长沙<van-icon name="arrow-down" color="black" />
+        {{cityName}}<van-icon name="arrow-down" color="black" />
       </template>
       <template #right>
         <van-icon name="search" size="18" color="black" />
       </template>
     </van-nav-bar>
     <div class="cinema" :style="{ height: height }">
-      <ul>
-        <li v-for="data in cinemalist" :key="data.cinemaId">
+      <van-list>
+        <van-cell v-for="data in cinemaList" :key="data.cinemaId">
           <div>{{ data.name }}</div>
           <div class="address">{{ data.address }}</div>
-        </li>
-      </ul>
+        </van-cell>
+      </van-list>
     </div>
   </div>
 </template>
 
 <script>
 import BetterScroll from "better-scroll";
-import http from "@/util/http.js";
 import Vue from "vue";
-import { NavBar, Icon } from "vant";
+import { NavBar, Icon ,List,Cell} from "vant";
+import { mapActions, mapMutations, mapState } from 'vuex';
 
-Vue.use(NavBar).use(Icon);
+Vue.use(NavBar).use(Icon).use(List).use(Cell);
 export default {
   methods:{
+    ...mapActions('CinemaModule',['getCinemaList']),
+    ...mapMutations('CinemaModule',['clearCinemaList']),
     hanldClick(){
-    
+      // this.$store.commit('clearCinemaList')
+      this.clearCinemaList(),
       this.$router.push('/city')
+    },
+    hanldRightClick(){
+      // console.log("right");
+      this.$router.push('/cinema/search')
+      
     }
   },
   data() {
@@ -42,27 +51,37 @@ export default {
       height: 0,
     };
   },
+  computed:{
+    ...mapState('CinemaModule',['cinemaList']),
+    ...mapState('CityModule',['cityId','cityName'])
+  },
   mounted() {
-    //高度是减去了NavBar和底部的TabBer
+    //高度是减去了NavBar和底部的TabBer cinemalist
     this.height = document.documentElement.clientHeight - 100 + "px";
-    http({
-      url: `https://m.maizuo.com/gateway?cityId=430100&ticketFlag=1&k=7668767`,
-      headers: {
-        "X-Host": "mall.film-ticket.cinema.list",
-      },
-    }).then((res) => {
-      // console.log(res.data.data);
-      this.cinemalist = res.data.data.cinemas;
-
-      //状态立即改变,但是dom异步渲染
-      this.$nextTick(() => {
-        new BetterScroll(".cinema", {
-          scrollbar: {
-            fade: true,
-          },
+    if(this.cinemaList.length === 0 ){
+      //vuex 异步
+      this.getCinemaList(this.cityId).then(res=>{
+        //状态立即改变,但是dom异步渲染
+        this.$nextTick(() => {
+          new BetterScroll(".cinema", {
+            scrollbar: {
+              fade: true,
+            },
+          });
         });
-      });
-    });
+      })
+    }else{
+      console.log('缓存');
+        //状态立即改变,但是dom异步渲染
+        this.$nextTick(() => {
+          new BetterScroll(".cinema", {
+            scrollbar: {
+              fade: true,
+            },
+          });
+        });
+    }
+    
   },
 };
 </script>

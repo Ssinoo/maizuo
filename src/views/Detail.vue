@@ -79,6 +79,8 @@ import moment from "moment";
 import DetailSwiper from "./Detail/DetailSwiper.vue";
 import DetailHeader from "./Detail/DetailHeader.vue";
 import { ImagePreview} from "vant";
+import { mapMutations } from 'vuex';
+import {mapState} from 'vuex'
 //改变时间样式
 Vue.filter("dataFilter", (data) => {
   moment.locale("zh-ch");
@@ -112,6 +114,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations('TabbarModule',['hide','show']),
     handlePreview(index) {
       ImagePreview({
         images: this.filminfo.photos,
@@ -123,7 +126,12 @@ export default {
   },
   mounted() {
     
-    console.log(this.$route.query.id);
+    //打印跳转的id
+    // console.log(this.$route.query.id);
+    //进入页面隐藏 tabber
+    // this.$store.commit('hide');
+    //改变写法，用module的mapmutation
+    this.hide();
     http({
       // 路径直接从 base路径之后开始写
       url: `/gateway?filmId=${this.$route.query.id}&k=110640`,
@@ -138,6 +146,11 @@ export default {
       
     });
   },
+  beforeDestroy(){
+      //退出显示tabbar
+    // this.$store.commit('show');
+    this.show();
+  }
 };
 </script>
 
